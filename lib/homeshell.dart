@@ -1,3 +1,8 @@
+import 'package:expense_tracker/bottom_nav.dart';
+import 'package:expense_tracker/screens/home_screen.dart';
+import 'package:expense_tracker/screens/profile_screen.dart';
+import 'package:expense_tracker/screens/reports_screen.dart';
+import 'package:expense_tracker/screens/transaction_list.dart';
 import 'package:flutter/material.dart';
 
 class Homeshell extends StatefulWidget {
@@ -19,6 +24,17 @@ class _HomeshellState extends State<Homeshell> {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: IndexedStack(
+        index: currentIndex,
+        children: [
+          HomeScreen(),
+          TransactionList(),
+          ReportsScreen(),
+          ProfileScreen(),
+        ],
+      ),
+      bottomNavigationBar: CashbookBottomNav(currentIndex: currentIndex, onTap: _onNavTap),
+    );
   }
 }

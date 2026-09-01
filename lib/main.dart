@@ -1,3 +1,4 @@
+import 'package:expense_tracker/homeshell.dart';
 import 'package:expense_tracker/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -12,9 +13,11 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: _buildThemeData(),
+      darkTheme: _buildThemeData(),
       themeMode: ThemeMode.dark,
       title: "Cashbook",
-      theme: _buildThemeData(),
+      home: const Homeshell(),
     );
   }
 
@@ -33,12 +36,7 @@ class MainApp extends StatelessWidget {
         backgroundColor: colorScheme.primary,
         elevation: 0,
       ),
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: colorScheme.surface,
-        elevation: 2,
-        selectedItemColor: AppColors.border,
-        unselectedItemColor: AppColors.textTertiary
-      )
+      
     );
   }
 }

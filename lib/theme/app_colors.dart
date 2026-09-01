@@ -7,7 +7,7 @@ class AppColors {
   static const bg = Color(0xFF0A0D14);
   static const surface = Color(0xFF131826);
   static const surface2 = Color(0xFF1B2233);
-  static const border = Color(0x12FFFFFF); // 7% white
+  static const border = Color(0xFFEAF0FF);
 
   // Text
   static const textPrimary = Color(0xFFF2F4FA);
