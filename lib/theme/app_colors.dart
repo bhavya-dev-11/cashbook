@@ -23,6 +23,12 @@ class AppColors {
     colors: [violet, blue],
   );
 
+  static const greenGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [income, Color.fromARGB(255, 52, 211, 123)],
+  );
+
   // Income / Expense
   static const income = Color(0xFF34D399);
   static const incomeBg = Color(0x2134D399); // 13% opacity

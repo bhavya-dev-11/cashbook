@@ -14,7 +14,7 @@ class Homeshell extends StatefulWidget {
 
 class _HomeshellState extends State<Homeshell> {
 
-  int currentIndex = 0;
+  int currentIndex = 1;
 
   void _onNavTap(int index){
     setState(() {
@@ -28,7 +28,7 @@ class _HomeshellState extends State<Homeshell> {
       body: IndexedStack(
         index: currentIndex,
         children: [
-          HomeScreen(),
+          HomeScreen(onTabSelected: _onNavTap,),
           TransactionList(),
           ReportsScreen(),
           ProfileScreen(),
