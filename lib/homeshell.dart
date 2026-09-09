@@ -14,7 +14,7 @@ class Homeshell extends StatefulWidget {
 
 class _HomeshellState extends State<Homeshell> {
 
-  int currentIndex = 1;
+  int currentIndex = 0;
 
   void _onNavTap(int index){
     setState(() {
