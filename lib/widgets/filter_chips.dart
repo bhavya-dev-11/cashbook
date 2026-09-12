@@ -4,7 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 class FilterChips extends StatefulWidget {
   final List<String> filters;
-  const FilterChips({super.key, required this.filters});
+  final String selectedFilter;
+  const FilterChips({super.key, required this.filters, required this.selectedFilter});
 
   @override
   State<FilterChips> createState() => _FilterChipsState();
@@ -12,7 +13,7 @@ class FilterChips extends StatefulWidget {
 
 class _FilterChipsState extends State<FilterChips> {
 
-  String _selectedFilter = "All";
+  late String _selectedFilter = widget.selectedFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class _FilterChipsState extends State<FilterChips> {
                 borderRadius: BorderRadius.circular(50)
               ),
               child: 
-              Center(child: Text(filter, style: GoogleFonts.inter(color: _selectedFilter == filter ? AppColors.textPrimary : AppColors.textSecondary, fontSize: 16),),
+              Center(child: Text(filter, style: GoogleFonts.inter(color: _selectedFilter == filter ? AppColors.textPrimary : AppColors.textSecondary, fontSize: 16, fontWeight: FontWeight.w600),),
             ),)
               
            )

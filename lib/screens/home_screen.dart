@@ -134,6 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               SizedBox(height: 28),
               FilterChips(
+                selectedFilter: "All",
                 filters: ["All", "Income", "Expense", "Food", "Travel"],
               ),
               SizedBox(height: 28),
