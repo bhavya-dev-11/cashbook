@@ -1,9 +1,12 @@
 import 'package:expense_tracker/reusables/category_style.dart';
+import 'package:expense_tracker/widgets/app_bar.dart';
+import 'package:expense_tracker/widgets/drawer.dart';
 import 'package:expense_tracker/widgets/transaction_tile.dart';
 import 'package:flutter/material.dart';
 
 class TransactionList extends StatefulWidget {
-  const TransactionList({super.key});
+  final void Function(int) onTabSelected;
+  const TransactionList({super.key, required this.onTabSelected});
 
   @override
   State<TransactionList> createState() => _TransactionListState();
@@ -16,7 +19,7 @@ class _TransactionListState extends State<TransactionList> {
       "category": "food",
       "amount": 420,
       "isIncome": false,
-      "date": "Today",
+      "date": "10 Sep 2026",
       "time": "08:30 PM",
     },
     {
@@ -24,7 +27,7 @@ class _TransactionListState extends State<TransactionList> {
       "category": "salary",
       "amount": 65000,
       "isIncome": true,
-      "date": "Yesterday",
+      "date": "09 Sep 2026",
       "time": "09:15 AM",
     },
     {
@@ -32,7 +35,7 @@ class _TransactionListState extends State<TransactionList> {
       "category": "travel",
       "amount": 5240,
       "isIncome": false,
-      "date": "2 days ago",
+      "date": "08 Sep 2026",
       "time": "06:45 AM",
     },
     {
@@ -40,7 +43,7 @@ class _TransactionListState extends State<TransactionList> {
       "category": "bills",
       "amount": 1180,
       "isIncome": false,
-      "date": "3 days ago",
+      "date": "07 Sep 2026",
       "time": "11:20 AM",
     },
     {
@@ -48,7 +51,7 @@ class _TransactionListState extends State<TransactionList> {
       "category": "shopping",
       "amount": 2350,
       "isIncome": false,
-      "date": "3 days ago",
+      "date": "07 Sep 2026",
       "time": "07:10 PM",
     },
     {
@@ -56,7 +59,7 @@ class _TransactionListState extends State<TransactionList> {
       "category": "entertainment",
       "amount": 649,
       "isIncome": false,
-      "date": "4 days ago",
+      "date": "06 Sep 2026",
       "time": "12:05 AM",
     },
     {
@@ -64,7 +67,7 @@ class _TransactionListState extends State<TransactionList> {
       "category": "freelance",
       "amount": 12000,
       "isIncome": true,
-      "date": "5 days ago",
+      "date": "05 Sep 2026",
       "time": "04:40 PM",
     },
     {
@@ -72,7 +75,7 @@ class _TransactionListState extends State<TransactionList> {
       "category": "groceries",
       "amount": 1840,
       "isIncome": false,
-      "date": "6 days ago",
+      "date": "04 Sep 2026",
       "time": "10:55 AM",
     },
     {
@@ -80,7 +83,7 @@ class _TransactionListState extends State<TransactionList> {
       "category": "health",
       "amount": 560,
       "isIncome": false,
-      "date": "1 week ago",
+      "date": "03 Sep 2026",
       "time": "02:15 PM",
     },
     {
@@ -88,16 +91,16 @@ class _TransactionListState extends State<TransactionList> {
       "category": "rent",
       "amount": 15000,
       "isIncome": false,
-      "date": "1 week ago",
+      "date": "03 Sep 2026",
       "time": "01:00 PM",
     },
   ];
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: reusableAppBar("Transactions"),
+      drawer: reusableDrawer(widget.onTabSelected, context),
       body: SafeArea(
         child: Center(
           child: Expanded(
@@ -106,7 +109,9 @@ class _TransactionListState extends State<TransactionList> {
               itemCount: transactions.length,
               itemBuilder: (context, index) {
                 final transaction = transactions[index];
-                final style = CategoryTheme.forCategory(transaction['category']);
+                final style = CategoryTheme.forCategory(
+                  transaction['category'],
+                );
                 return transactionTile(transaction, style);
               },
             ),
@@ -115,5 +120,4 @@ class _TransactionListState extends State<TransactionList> {
       ),
     );
   }
-
 }

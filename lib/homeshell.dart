@@ -29,8 +29,8 @@ class _HomeshellState extends State<Homeshell> {
         index: currentIndex,
         children: [
           HomeScreen(onTabSelected: _onNavTap,),
-          TransactionList(),
-          ReportsScreen(),
+          TransactionList(onTabSelected: _onNavTap,),
+          ReportsScreen(onTabSelected: _onNavTap,),
           ProfileScreen(),
         ],
       ),

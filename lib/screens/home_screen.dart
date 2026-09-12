@@ -12,10 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatefulWidget {
   final void Function(int) onTabSelected;
-  const HomeScreen({
-    super.key,
-    required this.onTabSelected
-    });
+  const HomeScreen({super.key, required this.onTabSelected});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -28,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "category": "food",
       "amount": 420,
       "isIncome": false,
-      "date": "Today",
+      "date": "10 Sep 2026",
       "time": "08:30 PM",
     },
     {
@@ -36,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "category": "salary",
       "amount": 65000,
       "isIncome": true,
-      "date": "Yesterday",
+      "date": "09 Sep 2026",
       "time": "09:15 AM",
     },
     {
@@ -44,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "category": "travel",
       "amount": 5240,
       "isIncome": false,
-      "date": "2 days ago",
+      "date": "08 Sep 2026",
       "time": "06:45 AM",
     },
     {
@@ -52,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "category": "bills",
       "amount": 1180,
       "isIncome": false,
-      "date": "3 days ago",
+      "date": "07 Sep 2026",
       "time": "11:20 AM",
     },
     {
@@ -60,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "category": "shopping",
       "amount": 2350,
       "isIncome": false,
-      "date": "3 days ago",
+      "date": "07 Sep 2026",
       "time": "07:10 PM",
     },
     {
@@ -68,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "category": "entertainment",
       "amount": 649,
       "isIncome": false,
-      "date": "4 days ago",
+      "date": "06 Sep 2026",
       "time": "12:05 AM",
     },
     {
@@ -76,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "category": "freelance",
       "amount": 12000,
       "isIncome": true,
-      "date": "5 days ago",
+      "date": "05 Sep 2026",
       "time": "04:40 PM",
     },
     {
@@ -84,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "category": "groceries",
       "amount": 1840,
       "isIncome": false,
-      "date": "6 days ago",
+      "date": "04 Sep 2026",
       "time": "10:55 AM",
     },
     {
@@ -92,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "category": "health",
       "amount": 560,
       "isIncome": false,
-      "date": "1 week ago",
+      "date": "03 Sep 2026",
       "time": "02:15 PM",
     },
     {
@@ -100,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "category": "rent",
       "amount": 15000,
       "isIncome": false,
-      "date": "1 week ago",
+      "date": "03 Sep 2026",
       "time": "01:00 PM",
     },
   ];
@@ -110,16 +107,19 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       drawer: reusableDrawer(widget.onTabSelected, context),
       floatingActionButton: Container(
-        decoration: BoxDecoration(gradient: AppColors.gradient, shape: BoxShape.circle),
+        decoration: BoxDecoration(
+          gradient: AppColors.gradient,
+          shape: BoxShape.circle,
+        ),
         child: FloatingActionButton(
           onPressed: () {
             addTransactionBottomSheet(context);
           },
           backgroundColor: Colors.transparent,
-          child: Icon(Icons.add, color: AppColors.textPrimary,),
+          child: Icon(Icons.add, color: AppColors.textPrimary),
         ),
       ),
-      appBar: reusableAppBar("Cashbook",),
+      appBar: reusableAppBar("Cashbook"),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(22),
@@ -153,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => TransactionList(),
+                          builder: (context) => TransactionList(onTabSelected: widget.onTabSelected,),
                         ),
                       );
                     },
