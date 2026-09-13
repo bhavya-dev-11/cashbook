@@ -31,7 +31,7 @@ class _HomeshellState extends State<Homeshell> {
           HomeScreen(onTabSelected: _onNavTap,),
           TransactionList(onTabSelected: _onNavTap,),
           ReportsScreen(onTabSelected: _onNavTap,),
-          ProfileScreen(),
+          ProfileScreen(onTabSelected: _onNavTap,),
         ],
       ),
       bottomNavigationBar: CashbookBottomNav(currentIndex: currentIndex, onTap: _onNavTap),
