@@ -1,4 +1,5 @@
 import 'package:expense_tracker/homeshell.dart';
+import 'package:expense_tracker/screens/login_screen.dart';
 import 'package:expense_tracker/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class MainApp extends StatelessWidget {
       darkTheme: _buildThemeData(),
       themeMode: ThemeMode.dark,
       title: "Cashbook",
-      home: const Homeshell(),
+      home: LoginScreen(),
     );
   }
 
