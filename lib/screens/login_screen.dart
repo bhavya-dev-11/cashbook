@@ -1,3 +1,4 @@
+import 'package:expense_tracker/screens/signup_screen.dart';
 import 'package:expense_tracker/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,8 +14,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   bool isVisible = false;
 
-  TextEditingController _email = TextEditingController();
-  TextEditingController _password = TextEditingController();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -218,7 +219,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(height: 26),
                       Row(
-                        
                         children: [
                           Expanded(
                             child: Container(
@@ -229,7 +229,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(18),
                                 color: AppColors.surface2,
-                               
+
                                 shape: BoxShape.rectangle,
                               ),
                               child: Row(
@@ -260,7 +260,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(18),
                                 color: AppColors.surface2,
-                                
+
                                 shape: BoxShape.rectangle,
                               ),
                               child: Row(
@@ -283,9 +283,38 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ],
                       ),
+                      
                     ],
                   ),
                 ),
+                SizedBox(height: 26),
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => SignupScreen()));
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Don't have an account? ",
+                              style: GoogleFonts.inter(
+                                color: AppColors.textSecondary,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Text(
+                              "Sign Up",
+                              style: GoogleFonts.inter(
+                                color: AppColors.blue,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                      
+                          ],
+                        ),
+                      ),
               ],
             ),
           ),
