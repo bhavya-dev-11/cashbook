@@ -26,14 +26,19 @@ class _SignupScreenState extends State<SignupScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.border, width: 0.3),
-                  borderRadius: BorderRadius.circular(16),
-                  color: AppColors.surface2,
+              GestureDetector(
+                onTap: (){
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.border, width: 0.3),
+                    borderRadius: BorderRadius.circular(16),
+                    color: AppColors.surface2,
+                  ),
+                  child: const Icon(Icons.arrow_back, size: 20),
                 ),
-                child: const Icon(Icons.arrow_back, size: 20),
               ),
               SizedBox(height: 18),
               Text(
