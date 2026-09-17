@@ -1,3 +1,5 @@
+import 'package:expense_tracker/controller/dashboard_controller.dart';
+import 'package:expense_tracker/models/dashboard_model.dart';
 import 'package:expense_tracker/reusables/category_style.dart';
 import 'package:expense_tracker/screens/transaction_list.dart';
 import 'package:expense_tracker/theme/app_colors.dart';
@@ -8,99 +10,26 @@ import 'package:expense_tracker/widgets/filter_chips.dart';
 import 'package:expense_tracker/widgets/transaction_tile.dart';
 import 'package:expense_tracker/widgets/trend_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   final void Function(int) onTabSelected;
   const HomeScreen({super.key, required this.onTabSelected});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  List<Map<String, dynamic>> transactions = [
-    {
-      "title": "Zomato Order",
-      "category": "food",
-      "amount": 420,
-      "isIncome": false,
-      "date": "10 Sep 2026",
-      "time": "08:30 PM",
-    },
-    {
-      "title": "Monthly Salary",
-      "category": "salary",
-      "amount": 65000,
-      "isIncome": true,
-      "date": "09 Sep 2026",
-      "time": "09:15 AM",
-    },
-    {
-      "title": "Indigo Flight",
-      "category": "travel",
-      "amount": 5240,
-      "isIncome": false,
-      "date": "08 Sep 2026",
-      "time": "06:45 AM",
-    },
-    {
-      "title": "Electricity Bill",
-      "category": "bills",
-      "amount": 1180,
-      "isIncome": false,
-      "date": "07 Sep 2026",
-      "time": "11:20 AM",
-    },
-    {
-      "title": "Myntra Purchase",
-      "category": "shopping",
-      "amount": 2350,
-      "isIncome": false,
-      "date": "07 Sep 2026",
-      "time": "07:10 PM",
-    },
-    {
-      "title": "Netflix Subscription",
-      "category": "entertainment",
-      "amount": 649,
-      "isIncome": false,
-      "date": "06 Sep 2026",
-      "time": "12:05 AM",
-    },
-    {
-      "title": "Freelance Project",
-      "category": "freelance",
-      "amount": 12000,
-      "isIncome": true,
-      "date": "05 Sep 2026",
-      "time": "04:40 PM",
-    },
-    {
-      "title": "Big Bazaar",
-      "category": "groceries",
-      "amount": 1840,
-      "isIncome": false,
-      "date": "04 Sep 2026",
-      "time": "10:55 AM",
-    },
-    {
-      "title": "Apollo Pharmacy",
-      "category": "health",
-      "amount": 560,
-      "isIncome": false,
-      "date": "03 Sep 2026",
-      "time": "02:15 PM",
-    },
-    {
-      "title": "House Rent",
-      "category": "rent",
-      "amount": 15000,
-      "isIncome": false,
-      "date": "03 Sep 2026",
-      "time": "01:00 PM",
-    },
-  ];
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.microtask((){
+      ref.read(dashboardControllerProvider.notifier).getDashboard();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,68 +52,97 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(22),
-          child: Column(
-            children: [
-              balanceCard("48,320.75", "75,000", "24,180"),
-              SizedBox(height: 28),
-              TrendBar(
-                values: [0.32, 0.62, 0.54, 0.82, 0.71, 0.21, 0.96],
-                lables: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-                highlighIndex: DateTime.now().weekday,
-              ),
-              SizedBox(height: 28),
-              FilterChips(
-                selectedFilter: "All",
-                filters: ["All", "Income", "Expense", "Food", "Travel"],
-              ),
-              SizedBox(height: 28),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Recent Transactions",
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 18,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TransactionList(onTabSelected: widget.onTabSelected,),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      "See all",
-                      style: GoogleFonts.inter(
-                        color: AppColors.blue,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 14),
-              SizedBox(
-                height: 500,
-                child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    final transaction = transactions[index];
-                    final style = CategoryTheme.forCategory(
-                      transaction['category'],
+          child: Consumer(
+            builder: (context, ref, child) {
+              final dashboardGate = ref.watch(dashboardControllerProvider);
+              return dashboardGate.when(
+                data: (dashboard) {
+                  if (dashboard == null) {
+                    return const Center(
+                      child: Text("No Dashboard Data Available"),
                     );
-                    return transactionTile(transaction, style);
-                  },
-                ),
-              ),
-            ],
+                  }
+
+                  return Column(
+                    children: [
+                      balanceCard(
+                        dashboard!.totals.balance.toString(),
+                        dashboard.totals.income.toString(),
+                        dashboard.totals.expense.toString(),
+                      ),
+                      SizedBox(height: 28),
+                      TrendBar(
+                        values: [0.32, 0.62, 0.54, 0.82, 0.71, 0.21, 0.96],
+                        lables: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+                        highlighIndex: DateTime.now().weekday,
+                      ),
+                      SizedBox(height: 28),
+                      FilterChips(
+                        selectedFilter: "All",
+                        filters: ["All", "Income", "Expense", "Food", "Travel"],
+                      ),
+                      SizedBox(height: 28),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Recent Transactions",
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 18,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TransactionList(
+                                    onTabSelected: widget.onTabSelected,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              "See all",
+                              style: GoogleFonts.inter(
+                                color: AppColors.blue,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 14),
+                      SizedBox(
+                        height: 500,
+                        child: ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: 5,
+                          itemBuilder: (context, index) {
+                            final transaction = dashboard.transactions[index];
+                            final style = CategoryTheme.forCategory(
+                              transaction.category,
+                            );
+                            return transactionTile(transaction, style);
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                },
+                error: (e, st) {
+                  return Center(child: Text("Error loading dashboard data $e"));
+                },
+                loading: () {
+                  return const CircularProgressIndicator(
+                    color: AppColors.textPrimary,
+                  );
+                },
+              );
+            },
           ),
         ),
       ),

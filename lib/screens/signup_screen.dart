@@ -1,24 +1,67 @@
+import 'package:expense_tracker/controller/auth_controller.dart';
+import 'package:expense_tracker/homeshell.dart';
 import 'package:expense_tracker/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SignupScreen extends StatefulWidget {
+class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   bool isVisible = false;
   bool isAgreed = false;
+  bool loading = false;
+
   final TextEditingController _fullName = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(authControllerProvider, (previous, next) {
+      return next.whenOrNull(
+        data: (user) {
+          if (user != null) {
+            setState(() {
+              loading = false;
+            });
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  "Sign up successfully",
+                  style: TextStyle(color: AppColors.textPrimary),
+                ),
+                backgroundColor: AppColors.income,
+              ),
+            );
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Homeshell()));
+          }
+        },
+        loading: (){
+          setState(() {
+            loading = true;
+          });
+        },
+        error: (e, st){
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  "Error while signing up $e",
+                  style: TextStyle(color: AppColors.textPrimary),
+                ),
+                backgroundColor: AppColors.expense,
+              ),
+            );
+        }
+      );
+    });
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -27,7 +70,7 @@ class _SignupScreenState extends State<SignupScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   Navigator.pop(context);
                 },
                 child: Container(
@@ -96,8 +139,8 @@ class _SignupScreenState extends State<SignupScreen> {
                       validator: (value) {
                         if (value == null ||
                             value.isEmpty ||
-                            !value.contains('@')) {
-                          return "Please enter correct email address";
+                            value.length < 2) {
+                          return "Please enter correct name";
                         }
                         return null;
                       },
@@ -254,6 +297,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: GestureDetector(
+                        onTap: (){
+                          ref.read(authControllerProvider.notifier).signUp(_fullName.text, _email.text, _password.text);
+                        },
                         child: Container(
                           padding: EdgeInsets.all(14),
                           decoration: BoxDecoration(
@@ -262,7 +308,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             shape: BoxShape.rectangle,
                           ),
                           child: Center(
-                            child: Text(
+                            child: loading ? CircularProgressIndicator(color: AppColors.textPrimary,) : Text(
                               "Create Account",
                               style: GoogleFonts.inter(
                                 color: AppColors.textPrimary,

@@ -1,24 +1,73 @@
+import 'package:expense_tracker/controller/auth_controller.dart';
+import 'package:expense_tracker/homeshell.dart';
 import 'package:expense_tracker/screens/signup_screen.dart';
 import 'package:expense_tracker/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   bool isVisible = false;
-
+  bool loading = false;
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+
+    ref.listen(authControllerProvider, (previous, next) {
+
+    next.whenOrNull(
+      data: (user) {
+        if (user != null) {
+          setState(() {
+            loading = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                "Login Successfully",
+                style: GoogleFonts.inter(
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              backgroundColor: AppColors.income,
+            ),
+          );
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Homeshell()));
+        }
+      },
+
+      error: (e, st) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              "Error while login $e",
+              style: GoogleFonts.inter(
+                color: AppColors.textPrimary,
+              ),
+            ),
+            backgroundColor: AppColors.expense,
+          ),
+        );
+      },
+
+      loading: (){
+        setState(() {
+          loading = true;
+        });
+      }
+    );
+  });
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -171,6 +220,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: GestureDetector(
+                          onTap: (){
+                            ref.read(authControllerProvider.notifier).login(_email.text, _password.text);
+                          },
                           child: Container(
                             padding: EdgeInsets.all(14),
                             decoration: BoxDecoration(
@@ -179,7 +231,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               shape: BoxShape.rectangle,
                             ),
                             child: Center(
-                              child: Text(
+                              child: loading ? CircularProgressIndicator(color: AppColors.textPrimary,) : Text(
                                 "Login",
                                 style: GoogleFonts.inter(
                                   color: AppColors.textPrimary,

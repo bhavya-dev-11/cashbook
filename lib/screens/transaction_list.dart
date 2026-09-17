@@ -112,7 +112,7 @@ class _TransactionListState extends State<TransactionList> {
                 final style = CategoryTheme.forCategory(
                   transaction['category'],
                 );
-                return transactionTile(transaction, style);
+                // return transactionTile(transaction, style);
               },
             ),
           ),

@@ -1,14 +1,15 @@
+import 'package:expense_tracker/models/transaction_model.dart';
 import 'package:expense_tracker/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 Widget transactionTile(
-    Map<String, dynamic> transaction,
+    TransactionModel transaction,
     Map<String, dynamic> style,
   ) {
     final accentColor = style["color"] as Color;
-    final amountText = transaction["isIncome"]
-    ? "+₹${transaction["amount"]}"
-    : "-₹${transaction["amount"]}";
+    final amountText = transaction.category == "income"
+    ? "+₹${transaction.amount}"
+    : "-₹${transaction.amount}";
     return Container(
       margin: EdgeInsets.only(bottom: 12),
       padding: EdgeInsets.all(16),
@@ -37,7 +38,7 @@ Widget transactionTile(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                transaction["title"],
+                transaction.note,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
@@ -48,7 +49,7 @@ Widget transactionTile(
               ),
               SizedBox(height: 6,),
               Text(
-                transaction["category"],
+                transaction.category,
                 style: TextStyle(
                   color: AppColors.textSecondary,
                   fontWeight: FontWeight.w300,
@@ -64,7 +65,7 @@ Widget transactionTile(
               Text(
                 amountText,
                 style: TextStyle(
-                  color: transaction["isIncome"]
+                  color: transaction.category == "income"
                       ? AppColors.income
                       : AppColors.expense,
                   fontWeight: FontWeight.w600,
@@ -73,7 +74,7 @@ Widget transactionTile(
               ),
               SizedBox(height: 6,),
               Text(
-                transaction["time"],
+                "${DateTime.parse(transaction.date).hour} : ${DateTime.parse(transaction.date).minute}",
                 style: TextStyle(
                   color: AppColors.textSecondary,
                   fontWeight: FontWeight.w300,
